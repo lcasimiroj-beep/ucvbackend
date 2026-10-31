@@ -12,11 +12,15 @@ const tests = [
 ];
 
 for (const test of tests) {
-  await prisma.labTest.upsert({
-    where: { name: test.name },
-    update: { description: test.description, price: test.price, durationMin: test.durationMin, active: true },
-    create: test
-  });
+  const existing = await prisma.labTest.findFirst({ where: { name: test.name } });
+  if (existing) {
+    await prisma.labTest.update({
+      where: { id: existing.id },
+      data: { description: test.description, price: test.price, durationMin: test.durationMin, active: true }
+    });
+  } else {
+    await prisma.labTest.create({ data: test });
+  }
 }
 
 console.log(`Se cargaron ${tests.length} análisis de ejemplo.`);
