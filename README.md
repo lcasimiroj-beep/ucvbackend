@@ -23,3 +23,18 @@ API inicial para el sistema de citas de laboratorio.
 - PATCH `/api/appointments/:id/status` (administrador)
 
 La primera cuenta administradora debe crearse manualmente cambiando su rol a ADMIN en la base de datos. No existe una ruta pública para otorgar permisos administrativos.
+
+## Cargar análisis de ejemplo
+Después de ejecutar las migraciones, ejecuta:
+```bash
+npm run db:seed
+```
+Esto agrega análisis de demostración. Revisa y reemplaza los precios antes de usar el sistema con pacientes reales.
+
+## Crear el primer administrador
+1. Registra una cuenta desde `/api/auth/register`.
+2. En PostgreSQL, cambia el rol de esa cuenta usando su correo:
+```sql
+UPDATE "User" SET role = 'ADMIN' WHERE email = 'admin@tu-dominio.com';
+```
+No existe un registro público de administradores; así se evita que cualquier visitante se otorgue permisos.
